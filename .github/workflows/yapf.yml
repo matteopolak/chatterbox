@@ -2,8 +2,8 @@ name: yapf
 
 on:
   push:
-    branches:
-      - main
+    paths:
+    - '**.py'
 
 jobs:
   check-format:
