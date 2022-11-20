@@ -7,7 +7,7 @@ class TextModel(tf.keras.Model):
 		super().__init__(self)
 
 		self.embedding = tf.keras.layers.Embedding(size, embedding_dim)
-		self.gru = tf.keras.layers.GRU(
+		self.lstm = tf.keras.layers.LSTM(
 			rnn_units, return_sequences=True, return_state=True
 		)
 		self.dense = tf.keras.layers.Dense(size)
@@ -17,11 +17,11 @@ class TextModel(tf.keras.Model):
 		x = self.embedding(x, training=training)
 
 		if states is None:
-			states = self.gru.get_initial_state(x)
+			states = self.lstm.get_initial_state(x)
 
-		x, states = cast(
+		x, *states = cast(
 			tuple['tf.Tensor', 'tf.RaggedTensor'],
-			self.gru(x, initial_state=states, training=training)
+			self.lstm(x, initial_state=states, training=training)
 		)
 		x = self.dense(x, training=training)
 

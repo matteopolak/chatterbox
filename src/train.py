@@ -1,5 +1,6 @@
 from argparse import ArgumentParser, ArgumentTypeError
 from os import path, mkdir
+import matplotlib.pyplot as plt
 
 
 def validate_file(file: str):
@@ -89,18 +90,19 @@ def main():
 
 	from models import TextModel, TextGenerator
 
-	CHECKPOINT_PREFIX = os.path.join(
+	checkpoint_path = os.path.join(
 		'trained', args.model, 'checkpoints', 'ckpt_{epoch}'
 	)
-	CHECKPOINT_CALLBACK = tf.keras.callbacks.ModelCheckpoint(
-		filepath=CHECKPOINT_PREFIX,
+	checkpoint = tf.keras.callbacks.ModelCheckpoint(
+		filepath=checkpoint_path,
 		save_weights_only=True,
-		save_best_only=True
+		save_best_only=True,
+		monitor='accuracy'
 	)
 
-	df = pd.read_csv(args.data, delimiter=',', names=['username', 'text'])
-	text = (df.username.astype(str) + ': ' + df.text.astype(str) +
-		'\n').str.split('').explode()
+	df = pd.read_csv(args.data, delimiter=',', names=['username',
+		'text']).head(10_000)
+	text = (df.text.astype(str) + '\n').str.split('').explode()
 	text = text[text != '']
 
 	try:
@@ -142,11 +144,21 @@ def main():
 	)
 
 	model.compile(
-		optimizer='adam',
-		loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True)
+		optimizer=tf.keras.optimizers.Adam(learning_rate=0.04),
+		loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True),
+		metrics=['accuracy'],
 	)
 
-	model.fit(dataset, epochs=args.epochs, callbacks=[CHECKPOINT_CALLBACK])
+	history = model.fit(dataset, epochs=args.epochs, callbacks=[checkpoint])
+	'''
+	print(history.history['accuracy'])
+
+	plt.plot(history.history['accuracy'], color='green')
+	plt.twinx().plot(history.history['loss'], color='red')
+	plt.title('accuracy and loss')
+	plt.xlabel('epoch')
+	plt.savefig('plot.png')
+	'''
 
 	generator = TextGenerator(model, chars_from_ids, ids_from_chars)
 	next_char = tf.constant(['a'])
