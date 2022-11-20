@@ -11,7 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
     - name: 'Run yapf'
       uses: AlexanderMelde/yapf-action@master
       with:
-        args: --verbose --style=/home/runner/work/char-generator/chat-generator/.style.yapf
+        args: --verbose --style=/github/workspace/.style.yapf
