@@ -1,5 +1,5 @@
 from argparse import ArgumentParser, ArgumentTypeError
-from os import path
+from os import path, mkdir
 
 
 def validate_file(file: str):
@@ -90,7 +90,7 @@ def main():
 	from models import TextModel, TextGenerator
 
 	CHECKPOINT_PREFIX = os.path.join(
-		'pretrained', args.model, 'checkpoints', 'ckpt_{epoch}'
+		'trained', args.model, 'checkpoints', 'ckpt_{epoch}'
 	)
 	CHECKPOINT_CALLBACK = tf.keras.callbacks.ModelCheckpoint(
 		filepath=CHECKPOINT_PREFIX,
@@ -111,6 +111,7 @@ def main():
 		chars = text.unique()
 		vocab = sorted(set(chars))
 
+		mkdir(f'trained/{args.model}')
 		pickle.dump(vocab, open(f'trained/{args.model}/vocab.pickle', 'wb'))
 
 	ids_from_chars = tf.keras.layers.StringLookup(
@@ -148,7 +149,13 @@ def main():
 	model.fit(dataset, epochs=args.epochs, callbacks=[CHECKPOINT_CALLBACK])
 
 	generator = TextGenerator(model, chars_from_ids, ids_from_chars)
-	generator.next_char(tf.constant(['a']), states=None)
+	next_char = tf.constant(['a'])
+	states = None
+
+	for _ in range(2):
+		next_char, states = generator.next_char(
+			next_char, states=states
+		)  # type: ignore
 
 	tf.saved_model.save(generator, f'trained/{args.model}/model')
 

@@ -51,8 +51,8 @@ class TextGenerator(tf.keras.Model):
 	def next_char(
 		self,
 		inputs,
-		states: 'tf.RaggedTensor' | None = None
-	) -> tuple['tf.Tensor', 'tf.RaggedTensor' | None]:
+		states,
+	):
 		input_chars = tf.strings.unicode_split(inputs, 'UTF-8')
 		input_ids = self.ids_from_chars(input_chars).to_tensor()
 
@@ -60,7 +60,7 @@ class TextGenerator(tf.keras.Model):
 			inputs=input_ids, states=states, return_state=True
 		)
 
-		predicted_logits = predicted_logits[:-1:]
+		predicted_logits = predicted_logits[:, -1, :]
 		predicted_logits = predicted_logits / self.temperature
 		predicted_logits = predicted_logits + self.prediction_mask
 

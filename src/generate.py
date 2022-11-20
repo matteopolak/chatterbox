@@ -49,16 +49,16 @@ def main():
 	result = [next_char]
 
 	generate = cast(
-		'TextGenerator', tf.saved_model.load(f'pretrained/{args.model}')
+		'TextGenerator', tf.saved_model.load(f'trained/{args.model}/model')
 	)
 
-	for n in range(args.length):
+	for _ in range(args.length):
 		next_char, states = generate.next_char(
 			next_char, states=states
 		)  # type: ignore
 		result.append(next_char)
 
-	return tf.strings.join(result)[0].numpy().decode('utf-8')
+	print(tf.strings.join(result)[0].numpy().decode('utf-8'))
 
 
 if __name__ == '__main__':
