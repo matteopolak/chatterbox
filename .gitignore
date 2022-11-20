@@ -1,0 +1,5 @@
+trained/*
+!trained/.gitkeep
+__pycache__
+data/*
+!data/atrioc.csv

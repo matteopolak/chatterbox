@@ -1,0 +1,17 @@
+name: yapf
+
+on:
+  push:
+    paths:
+    - '**.py'
+
+jobs:
+  check-format:
+    name: Check formatting with yapf
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: 'Run yapf'
+      uses: AlexanderMelde/yapf-action@master
+      with:
+        args: --verbose
