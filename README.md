@@ -1,6 +1,6 @@
 # Chat Generator
 
-![Build Status](https://github.com/matteopolak/algorithms/actions/workflows/yapf.yml/badge.svg)
+![Build Status](https://github.com/matteopolak/chat-generator/actions/workflows/yapf.yml/badge.svg)
 [![License:MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Training on new text
