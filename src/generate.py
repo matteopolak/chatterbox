@@ -52,7 +52,7 @@ def main():
 		'TextGenerator', tf.saved_model.load(f'pretrained/{args.model}')
 	)
 
-	for n in range(int(args.length)):
+	for n in range(args.length):
 		next_char, states = generate.next_char(
 			next_char, states=states
 		)  # type: ignore
