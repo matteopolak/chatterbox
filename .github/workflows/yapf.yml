@@ -14,4 +14,4 @@ jobs:
     - name: 'Run yapf'
       uses: AlexanderMelde/yapf-action@master
       with:
-        args: --verbose
+        args: --verbose --style=/home/runner/work/char-generator/chat-generator/.style.yapf
