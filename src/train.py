@@ -100,9 +100,9 @@ def main():
 		monitor='accuracy'
 	)
 
-	df = pd.read_csv(args.data, delimiter=',', names=['username',
-		'text']).head(10_000)
-	text = (df.text.astype(str) + '\n').str.split('').explode()
+	df = pd.read_csv(args.data, delimiter=',', names=['username', 'text'])
+	text = (df.username.astype(str) + ': ' + df.text.astype(str) +
+		'\n').str.split('').explode()
 	text = text[text != '']
 
 	try:
