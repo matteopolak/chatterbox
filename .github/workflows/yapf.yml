@@ -16,4 +16,4 @@ jobs:
     - name: 'Run yapf'
       uses: AlexanderMelde/yapf-action@master
       with:
-        args: --verbose --style=/github/workspace/.style.yapf
+        args: --verbose
