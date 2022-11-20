@@ -1,1 +1,5 @@
-C:/Users/m/Documents/Projects/configs/.style.yapf
+[style]
+USE_TABS=true
+DEDENT_CLOSING_BRACKETS=true
+CONTINUATION_ALIGN_STYLE=FIXED
+BLANK_LINE_BEFORE_NESTED_CLASS_OR_DEF=false
